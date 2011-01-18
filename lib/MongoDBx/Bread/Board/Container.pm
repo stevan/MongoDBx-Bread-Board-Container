@@ -9,16 +9,16 @@ has '+name' => ( default => 'MongoDB' );
 has 'host'  => ( is => 'ro', isa => 'Str', default => 'localhost' );
 has 'port'  => ( is => 'ro', isa => 'Int', default => 27017 );
 
-has 'database_layout' => (
-    is       => 'ro',
-    isa      => 'HashRef[ ArrayRef[ Str ] ]',
-    required => 1,
-);
-
 has 'additional_connection_params' => (
     is      => 'ro',
     isa     => 'HashRef',
     default => sub { +{} }
+);
+
+has 'database_layout' => (
+    is       => 'ro',
+    isa      => 'HashRef[ ArrayRef[ Str ] ]',
+    required => 1,
 );
 
 sub BUILD {
@@ -137,34 +137,39 @@ connection and additionally using the C<database_layout>
 attribute can provide services to access your databases
 and collections as well.
 
-=attribute name
+=attr name
 
 This is inherited from L<Bread::Board::Container>, this
 defaults to 'MongoDB' in this container.
 
-=attribute host
+=attr host
 
 The hostname passed to L<MongoDB::Connection>, this
 defaults to 'localhost'.
 
-=attribute port
+=attr port
 
 The port number passed to L<MongoDB::Connection>, this
 defaults to 27017.
 
-=attribute additional_connection_params
+=attr additional_connection_params
 
 If you want to pass additional parameters to the
 L<MongoDB::Connection> constructor, just supply them
 here and they will get merged in with the C<host> and
 C<port> params.
 
-=attribute connection_lifecycle
+=attr database_layout
 
-By default each request for the connection object
+This is a data structure that represents the databases
+and collections you want to access. It is a HASH ref
+where the keys are the database names and the values
+are ARRAY refs of collection names. The set of
+sub-containers and services will then be created based
+on this information. See the C<SYNOPSIS> and the tests
+for more detailed examples.
 
-=attribute database_layout
-
+This attribute is required.
 
 
 
