@@ -6,8 +6,7 @@ use MongoDB;
 extends 'Bread::Board::Container';
 
 has '+name' => ( default => 'MongoDB' );
-has 'host'  => ( is => 'ro', isa => 'Str', default => 'localhost' );
-has 'port'  => ( is => 'ro', isa => 'Int', default => 27017 );
+has 'host'  => ( is => 'ro', isa => 'Str', default => 'mongodb://localhost:27017' );
 
 has 'additional_connection_params' => (
     is      => 'ro',
@@ -27,7 +26,6 @@ sub BUILD {
     container $self => as {
 
         service 'host' => $self->host;
-        service 'port' => $self->port;
 
         service 'connection' => (
             class => 'MongoDB::Connection',
@@ -35,11 +33,10 @@ sub BUILD {
                 my $s = shift;
                 MongoDB::Connection->new(
                     host => $s->param('host'),
-                    port => $s->param('port'),
                     %{ $self->additional_connection_params }
                 );
             },
-            dependencies => [ 'host', 'port' ],
+            dependencies => [ 'host' ],
         );
 
         foreach my $db_name ( keys %{ $self->database_layout } ) {

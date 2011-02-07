@@ -7,7 +7,7 @@ use Test::More;
 use Bread::Board;
 use MongoDBx::Bread::Board::Container;
 
-my $HOST = $ENV{MONGOD} || "localhost";
+my $HOST = $ENV{MONGOD} || "mongodb://localhost:27017";
 
 eval { MongoDB::Connection->new( host => $HOST ) };
 plan skip_all => $@ if $@;
