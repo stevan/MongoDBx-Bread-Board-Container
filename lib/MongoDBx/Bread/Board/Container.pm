@@ -70,6 +70,8 @@ sub BUILD {
 }
 
 no Moose; no Bread::Board; 1;
+
+__END__
 # ABSTRACT: An easy to use Bread::Board container for MongoDB
 
 =head1 SYNOPSIS
@@ -129,10 +131,10 @@ no Moose; no Bread::Board; 1;
 =head1 DESCRIPTION
 
 This is a subclass of L<Bread::Board::Container> which
-can be used to wrap your L<MongoDB> code. It manages your
-connection and additionally using the C<database_layout>
-attribute can provide services to access your databases
-and collections as well.
+can be used to provide services for your L<MongoDB> consuming
+code. It manages your connection and additionally using the
+C<database_layout> attribute can provide services to access
+your databases and collections as well.
 
 =attr name
 
@@ -142,12 +144,7 @@ defaults to 'MongoDB' in this container.
 =attr host
 
 The hostname passed to L<MongoDB::Connection>, this
-defaults to 'localhost'.
-
-=attr port
-
-The port number passed to L<MongoDB::Connection>, this
-defaults to 27017.
+defaults to 'mongodb://localhost:27017'.
 
 =attr additional_connection_params
 
