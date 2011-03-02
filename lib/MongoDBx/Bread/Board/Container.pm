@@ -59,7 +59,7 @@ sub BUILD {
                             (shift)->param( $dbh )
                                    ->get_collection( $coll_name );
                         },
-                        dependencies => [ "../../../$dbh" ]
+                        dependencies => [ "../$dbh" ]
                     );
                 }
 
