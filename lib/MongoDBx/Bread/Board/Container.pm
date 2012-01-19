@@ -14,6 +14,12 @@ has 'additional_connection_params' => (
     default => sub { +{} }
 );
 
+has 'mongo_connection_class' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'MongoDB::Connection'
+);
+
 has 'database_layout' => (
     is       => 'ro',
     isa      => 'HashRef[ ArrayRef[ Str ] ]',
@@ -23,15 +29,18 @@ has 'database_layout' => (
 sub BUILD {
     my $self = shift;
 
+    my $conn_class = $self->mongo_connection_class;
+
     container $self => as {
 
         service 'host' => $self->host;
 
         service 'connection' => (
-            class => 'MongoDB::Connection',
-            block => sub {
+            lifecycle => 'Singleton',
+            class     => $conn_class,
+            block     => sub {
                 my $s = shift;
-                MongoDB::Connection->new(
+                $conn_class->new(
                     host => $s->param('host'),
                     %{ $self->additional_connection_params }
                 );
@@ -152,6 +161,13 @@ If you want to pass additional parameters to the
 L<MongoDB::Connection> constructor, just supply them
 here and they will get merged in with the C<host> and
 C<port> params.
+
+=attr mongo_connection_class
+
+This is the name of the MongoDB connection class, it
+default to MongoDB::Connection, which is what you want
+to use most of the time, but if you want something else
+then you put it here.
 
 =attr database_layout
 
